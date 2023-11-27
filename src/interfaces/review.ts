@@ -2,8 +2,8 @@ import { Types, Document } from "mongoose";
 
 export interface  IReview {
     userId: Types.ObjectId;
-    movieId: number | null;
-    isReplyTo: Types.ObjectId | null;
+    movieId: number;
+    score: number;
     content: string;
 }
 

@@ -1,13 +1,13 @@
 import User from './user';
 import Review from './review';
-import MovieScore from './movieScore';
+import Comment from './Comment';
 import Chat from './chat';
 import Message from './message';
 
 export default {
     User, 
     Review,
-    MovieScore,
+    Comment,
     Chat,
     Message
 }
