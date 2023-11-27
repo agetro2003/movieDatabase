@@ -4,7 +4,7 @@ import { IMovie } from "./movie";
 import { IUser, IUserDocument } from "./user";
 import { IReview, IReviewDocument } from "./review";
 import { AuthRequest } from "./auth";
-import { IMovieScore, IMovieScoreDocument } from "./MovieScore";
+import { IMovieScore, IMovieScoreDocument } from "./movieScore";
 
 export type { 
     IChat,
