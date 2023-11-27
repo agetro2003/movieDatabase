@@ -1,9 +1,9 @@
 
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export interface IMovieScore {
     movieId: string;
-    userId: string;
+    userId: Types.ObjectId;
     score: number;
     }
 
