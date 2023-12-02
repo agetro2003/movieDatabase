@@ -1,23 +1,22 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-
+import passport from 'passport';
+import {passportMiddleware} from './middlewares';
+import routes from './routes';
 
 // initializations
 const app = express();
-
-// settings
-app.set('port', process.env.PORT || 3000);
 
 // middlewares
 app.use(morgan('dev'));
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(cors());
+app.use(passport.initialize());
+passport.use(passportMiddleware);
 
 // routes
-app.get('/', (req, res) => {
-    res.send(`The API is at http://localhost:${app.get('port')}`);
-});
+app.use(routes)
 
 export default app;
