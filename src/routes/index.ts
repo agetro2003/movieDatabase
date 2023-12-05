@@ -1,15 +1,18 @@
 import { Router } from "express";
 import { checkAuth } from '../middlewares';
-
+import trendingRouter from './trending';
 import authRouter from './auth';
 
-const routes = Router();
+const router = Router();
 
-routes.use('/auth', authRouter);
+router.use('/auth', authRouter);
 
-routes.use(checkAuth);
+router.use(checkAuth);
 
-routes.get('/', (req, res) => {
+router.get('/', (req, res) => {
     res.json({ message: 'Hello world' });
 });
-export default routes;
+
+router.use('/trending', trendingRouter);    
+
+export default router;
