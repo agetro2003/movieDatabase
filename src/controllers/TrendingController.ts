@@ -12,7 +12,7 @@ class TrendingController extends BaseController {
         const trendings = await AxiosInstance.get(`trending/${type}/${time}?language=${language}&page=${page}`)
         return this.successRes(res, 201, 'Success getting data', trendings.data)
     } catch (error) {
-       return this.errorRes(res, 500, 'Internal server error') 
+       return this.errorRes(res, 500, 'Internal server error', error) 
     }    
     }
 

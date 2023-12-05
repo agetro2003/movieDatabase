@@ -56,7 +56,7 @@ class AuthController extends BaseController {
         userId: user._id,
       });
     } catch (error) {
-      return this.errorRes(res, 500, 'Internal server error');
+      return this.errorRes(res, 500, 'Internal server error', error);
     }
   };
 }

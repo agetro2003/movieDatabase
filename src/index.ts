@@ -6,6 +6,7 @@ const PORT = process.env.PORT ?? 3000;
 
 const connection = async (): Promise<void> => {
   try {
+    console.log('Connecting to MongoDB...');
     const conn = await mongoose.connect(process.env.MONGODB_URI as string);
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
