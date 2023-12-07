@@ -16,7 +16,7 @@ class TrendingController extends BaseController {
             response.push({
             id: trending.id,
             name: trending.title? trending.title : trending.name,
-            poster: `https://image.tmdb.org/t/p/w780/${trending.poster_path}`,
+            poster: `https://image.tmdb.org/t/p/w780${trending.poster_path}`,
             media_type: trending.media_type,
             adult: trending.adult,
             })
