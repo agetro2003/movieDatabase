@@ -24,7 +24,7 @@ const response = search.data.results.filter((result: any) => result.media_type !
 }
 
 searchFilter = async (req: Request, res: Response): Promise<Response> => {
-    const media_type = req.query.media_type || "all";
+    const media_type = req.params.media_type || "all";
     const with_genre = req.query.with_genre || null;
     const sort_by = req.query.sort_by || null;
     const primary_release_year = req.query.primary_release_year || null;
@@ -84,7 +84,7 @@ searchFilter = async (req: Request, res: Response): Promise<Response> => {
             })
           
     
-            return this.successRes(res, 201, 'Success getting data', search.data.results)
+            return this.successRes(res, 201, 'Success getting data', response)
         } catch (error) {
             return this.errorRes(res, 500, 'Internal server error', error) 
     

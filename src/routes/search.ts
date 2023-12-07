@@ -6,6 +6,6 @@ const router = Router();
 
 router.get('/', SearchController.searchByText);
 
-router.get('/filter', SearchController.searchFilter);
+router.get('/filter/:media_type', SearchController.searchFilter);
 
 export default router;
