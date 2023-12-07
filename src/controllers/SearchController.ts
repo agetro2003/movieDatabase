@@ -76,15 +76,15 @@ searchFilter = async (req: Request, res: Response): Promise<Response> => {
             search.data.results.forEach((result: any) => {
                 response.push({
                     id: result.id,
-                    name: result.title,
+                    name: result.name || result.title,
                     poster: `https://image.tmdb.org/t/p/w780${result.poster_path}`,
-                    media_type: 'movie',
+                    media_type: media_type,
                     adult: result.adult,
                 })
             })
           
     
-            return this.successRes(res, 201, 'Success getting data', response)
+            return this.successRes(res, 201, 'Success getting data', search.data.results)
         } catch (error) {
             return this.errorRes(res, 500, 'Internal server error', error) 
     
