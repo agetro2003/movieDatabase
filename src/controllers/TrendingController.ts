@@ -11,16 +11,17 @@ class TrendingController extends BaseController {
       const trendings = await AxiosInstance.get(
         `trending/${type}/${time}?language=${language}&page=${page}`
       );
-      const results: any[] | undefined = [];
-      trendings.data.results.forEach((trending: any) => {
-        results.push({
+      
+      const results = trendings.data.results.map((trending: any) => {
+        return {
           id: trending.id,
           name: trending.title ? trending.title : trending.name,
           poster: `https://image.tmdb.org/t/p/w780${trending.poster_path}`,
           media_type: trending.media_type,
           adult: trending.adult,
-        });
+        };
       });
+
       const response = {
         page: trendings.data.page,
         total_pages: trendings.data.total_pages,
