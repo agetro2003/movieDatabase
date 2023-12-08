@@ -12,17 +12,15 @@ class SearchController extends BaseController {
         `search/multi?query=${query}&include_adult=${includeAdult}&page=${page}`
       );
 
-      const results = search.data.results.map((result: any) => {
-        if (result.media_type !== "person") {
-          return {
-            id: result.id,
-            name: result.title ? result.title : result.name,
-            poster: `https://image.tmdb.org/t/p/w780${result.poster_path}`,
-            media_type: result.media_type,
-            adult: result.adult,
-          };
-        }
-      });
+      const results = search.data.results
+        .filter((result: any) => result.media_type !== "person")
+        .map((result: any) => ({
+          id: result.id,
+          name: result.title ? result.title : result.name,
+          poster: `https://image.tmdb.org/t/p/w780${result.poster_path}`,
+          media_type: result.media_type,
+          adult: result.adult,
+        }));
 
       const response = {
         page: search.data.page,
