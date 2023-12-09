@@ -16,7 +16,7 @@ class SearchController extends BaseController {
         .filter((result: any) => result.media_type !== "person")
         .map((result: any) => ({
           id: result.id,
-          name: result.title ? result.title : result.name,
+          name: result.title || result.name,
           poster: result.poster_path
             ? `https://image.tmdb.org/t/p/w780${result.poster_path}`
             : "https://firebasestorage.googleapis.com/v0/b/imgstorage-b6657.appspot.com/o/imgNotFound.png?alt=media&token=3eec4488-078e-4130-a238-36936cb38807",
@@ -37,17 +37,17 @@ class SearchController extends BaseController {
   };
 
   searchFilter = async (req: Request, res: Response): Promise<Response> => {
-    const media_type = req.params.media_type || "all";
-    const with_genre = req.query.with_genre || null;
+    const media_type = req.params.media_type || "movie";
+    const with_genres = req.query.with_genres || null;
     const sort_by = req.query.sort_by || null;
     const primary_release_year = req.query.primary_release_year || null;
     const year = req.query.year || null;
     const without_genres = req.query.without_genres || null;
     const page = req.query.page || null;
     const with_cast = req.query.with_cast || null;
-    const query = "";
+    let query = "";
     const filters = {
-      with_genre,
+      with_genres,
       sort_by,
       primary_release_year,
       year,
@@ -57,63 +57,36 @@ class SearchController extends BaseController {
     };
     for (const [key, value] of Object.entries(filters)) {
       if (value !== null) {
-        query.concat(`&${key}=${value}`);
+        query += `&${key}=${value}`;
       }
     }
-    if (media_type == "all") {
-      try {
-        const search = await AxiosInstance.get(
-          `discover/movie?${query.slice(1)}`
-        );
-        const search2 = await AxiosInstance.get(
-          `discover/tv?${query.slice(1)}`
-        );
-
-        const response: any[] | undefined = [];
-        search.data.results.forEach((result: any) => {
-          response.push({
-            id: result.id,
-            name: result.title,
-            poster: `https://image.tmdb.org/t/p/w780${result.poster_path}`,
-            media_type: "movie",
-            adult: result.adult,
-          });
-        });
-        search2.data.results.forEach((result: any) => {
-          response.push({
-            id: result.id,
-            name: result.name,
-            poster: `https://image.tmdb.org/t/p/w780${result.poster_path}`,
-            media_type: "tv",
-            adult: result.adult,
-          });
-        });
-
-        return this.successRes(res, 201, "Success getting data", response);
-      } catch (error) {
-        return this.errorRes(res, 500, "Internal server error", error);
-      }
-    } else {
       try {
         const search = await AxiosInstance.get(
           `discover/${media_type}?${query.slice(1)}`
         );
-        const response: any[] | undefined = [];
-        search.data.results.forEach((result: any) => {
-          response.push({
+
+        const results = search.data.results
+        .map((result: any) => ({
             id: result.id,
-            name: result.name || result.title,
-            poster: `https://image.tmdb.org/t/p/w780${result.poster_path}`,
-            media_type: media_type,
+            name: result.title || result.name,
+            poster: result.poster_path
+                ? `https://image.tmdb.org/t/p/w780${result.poster_path}`
+                : "https://firebasestorage.googleapis.com/v0/b/imgstorage-b6657.appspot.com/o/imgNotFound.png?alt=media&token=3eec4488-078e-4130-a238-36936cb38807",
+            media_type: result.media_type,
             adult: result.adult,
-          });
-        });
+            }));
+
+        const response = {
+            page: search.data.page,
+            total_pages: search.data.total_pages,
+            results,
+            query: query.slice(1),
+            };
 
         return this.successRes(res, 201, "Success getting data", response);
       } catch (error) {
         return this.errorRes(res, 500, "Internal server error", error);
       }
-    }
   };
 }
 
