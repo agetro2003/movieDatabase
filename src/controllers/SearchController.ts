@@ -72,7 +72,7 @@ class SearchController extends BaseController {
             poster: result.poster_path
                 ? `https://image.tmdb.org/t/p/w780${result.poster_path}`
                 : "https://firebasestorage.googleapis.com/v0/b/imgstorage-b6657.appspot.com/o/imgNotFound.png?alt=media&token=3eec4488-078e-4130-a238-36936cb38807",
-            media_type: result.media_type,
+            media_type: media_type,
             adult: result.adult,
             }));
 

@@ -1,6 +1,6 @@
 import type { IChat, IChatDocument } from "./chat";
 import type { IMessage, IMessageDocument } from "./message";
-import type { IMovie } from "./movie";
+import type { IMovie, IMovieDocument } from "./movie";
 import type { IUser, IUserDocument } from "./user";
 import type { IReview, IReviewDocument } from "./review";
 import type { AuthRequest } from "./auth";
@@ -12,6 +12,7 @@ export type {
     IMessage,
     IMessageDocument,
     IMovie,
+    IMovieDocument,
     IUser,
     IUserDocument,
     IReview,
