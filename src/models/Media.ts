@@ -1,8 +1,9 @@
 import { Schema, model } from "mongoose";
-import { IMovieDocument } from "../interfaces";
+import { IMediaDocument } from "../interfaces";
 
-const MovieSchema = new Schema<IMovieDocument>({
-    MovieID: { type: Number, required: true },
+const MediaSchema = new Schema<IMediaDocument>(
+  {
+    MediaID: { type: Number, required: true },
     title: { type: String, required: true },
     overview: { type: String, required: true },
     poster: { type: String, required: true },
@@ -12,9 +13,12 @@ const MovieSchema = new Schema<IMovieDocument>({
     genres: { type: [Object], required: true },
     cast: { type: [Object], required: true },
     similar: { type: [Object], required: true },
-}, {
+    mediaType: { type: String, required: true },
+  },
+  {
     timestamps: true,
     versionKey: false,
-});
+  }
+);
 
-export default model<IMovieDocument>("Movie", MovieSchema);
+export default model<IMediaDocument>("Media", MediaSchema);

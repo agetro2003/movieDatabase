@@ -3,12 +3,12 @@ import Review from './Review';
 import Comment from './Comment';
 import Chat from './Chat';
 import Message from './Message';
-import Movie from './Movie';
+import Media from './Media';
 export {
     User, 
     Review,
     Comment,
     Chat,
     Message,
-    Movie,
+    Media,
 }
