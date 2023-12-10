@@ -13,7 +13,7 @@ userReviewCount: number;
 criticScoreAvg: number;
 userScoreAvg: number;
 genres: Object[];
-crew: Object[];
+cast: Object[];
 similar: Object[];
 }
 

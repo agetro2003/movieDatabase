@@ -12,7 +12,7 @@ class MovieController extends BaseController{
             const movie2 = await AxiosInstance.get(`movie/${id}?append_to_response=similar%2Cvideos%2Ccredits%2Crelease_dates`);
             const movieData = movie2.data;
             const trailer = movieData.videos.results.find((video: any) => video.type === "Trailer");
-            const crew = movieData.credits.cast.map((person: any) => ({
+            const cast = movieData.credits.cast.map((person: any) => ({
                 id: person.id,
                 name: person.name,
                 character: person.character,
@@ -33,7 +33,7 @@ class MovieController extends BaseController{
                 trailer: `https://www.youtube.com/watch?v=${trailer.key}`,
                 year: movieData.release_date.split("-")[0],
                 genres: movieData.genres,
-                crew: crew.slice(0, 10),
+                cast: cast.slice(0, 10),
                 similar: similar,
             });
             await newMovie.save();

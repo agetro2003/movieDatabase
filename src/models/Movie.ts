@@ -10,7 +10,7 @@ const MovieSchema = new Schema<IMovieDocument>({
     trailer: { type: String, required: true },
     year: { type: Number, required: true },
     genres: { type: [Object], required: true },
-    crew: { type: [Object], required: true },
+    cast: { type: [Object], required: true },
     similar: { type: [Object], required: true },
 }, {
     timestamps: true,
