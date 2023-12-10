@@ -33,7 +33,7 @@ class MovieController extends BaseController{
                 trailer: `https://www.youtube.com/watch?v=${trailer.key}`,
                 year: movieData.release_date.split("-")[0],
                 genres: movieData.genres,
-                crew: crew,
+                crew: crew.slice(0, 10),
                 similar: similar,
             });
             await newMovie.save();
