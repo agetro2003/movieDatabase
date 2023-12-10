@@ -1,6 +1,7 @@
 import { Document } from "mongoose";
 
 export interface IMovie {
+MovieID: number;
 title: string;
 overview: string;
 poster: string;
@@ -11,7 +12,9 @@ criticReviewCount: number;
 userReviewCount: number;
 criticScoreAvg: number;
 userScoreAvg: number;
-genres: string[];
+genres: Object[];
+crew: Object[];
+similar: Object[];
 }
 
 export interface IMovieDocument extends IMovie, Document {}
