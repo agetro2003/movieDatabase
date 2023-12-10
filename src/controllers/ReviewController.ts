@@ -28,6 +28,19 @@ try {
     return this.errorRes(res, 500, "Error creating review", error);
 }
 }
+
+//funcion para obtener Reviews
+getReviews = async (req: Request, res: Response): Promise<Response> => {
+try {
+    const { MediaID } = req.params;
+    const reviews = await Review.find({ MediaID });
+    return this.successRes(res, 200, "Reviews found", reviews);
+
+}
+catch (error) {
+    return this.errorRes(res, 500, "Error getting reviews", error);
+}
+}
 }
 
 export default new ReviewController();

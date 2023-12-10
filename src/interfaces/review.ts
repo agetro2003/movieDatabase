@@ -2,7 +2,7 @@ import { Types, Document } from "mongoose";
 
 export interface IReview {
   userId: Types.ObjectId;
-  MediaID: number;
+  MediaID: Types.ObjectId;
   score: number;
   content: string;
 }
