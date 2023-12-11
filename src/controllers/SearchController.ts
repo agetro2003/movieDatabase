@@ -42,6 +42,7 @@ class SearchController extends BaseController {
     const sort_by = req.query.sort_by || null;
     const primary_release_year = req.query.primary_release_year || null;
     const first_air_date_year = req.query.first_air_date_year || null;
+    const with_original_language = req.query.with_original_language || null;
     const page = req.query.page || null;
     let query = "";
     const filters = {
@@ -49,6 +50,7 @@ class SearchController extends BaseController {
       sort_by,
       primary_release_year,
       first_air_date_year,
+      with_original_language,
       page,
     };
     for (const [key, value] of Object.entries(filters)) {
