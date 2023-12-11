@@ -1,12 +1,14 @@
 import { Request, Response } from "express";
 import BaseController from "./BaseController";
 import { Review } from "../models";
+import { AuthRequest, IReviewDocument } from "../interfaces";
 
 class ReviewController extends BaseController{
 //funcion para crear Reviews
-createReview = async (req: Request, res: Response): Promise<Response> => {
+createReview = async (req: Request, res: Response): Promise<Response> => {;
 try {
-    const { userId, MediaID, score, content } = req.body;
+    const {MediaID, score, content } = req.body;
+    const userId = (req as AuthRequest).user._id
     if (score < 0 || score > 5) {
         return this.errorRes(res, 400, "Score must be between 0 and 5");
     }
@@ -17,7 +19,7 @@ try {
     
     let newReview;
     if (!content){
-        newReview = new Review({ userId, MediaID, score});
+        newReview = new Review({ userId, MediaID, score, content: ""});
     }
     else{
         newReview = new Review({ userId, MediaID, score, content});
@@ -32,8 +34,10 @@ try {
 //funcion para obtener Reviews
 getReviews = async (req: Request, res: Response): Promise<Response> => {
 try {
-    const { MediaID } = req.params;
-    const reviews = await Review.find({ MediaID });
+    const { id } = req.params;
+    console.log(id);
+    const reviews = await Review.find({ MediaID: id });
+    console.log(reviews);
     return this.successRes(res, 200, "Reviews found", reviews);
 
 }
@@ -41,6 +45,57 @@ catch (error) {
     return this.errorRes(res, 500, "Error getting reviews", error);
 }
 }
+
+//funcion para editar Reviews
+editReview = async (req: Request, res: Response): Promise<Response> => {
+try {
+    const userId = (req as AuthRequest).user._id
+    const { id } = req.params;
+    const {  score, content } = req.body;
+    const review: IReviewDocument | null = await Review.findById(id);
+    if (!review) {
+        return this.errorRes(res, 400, "Review not found");
+    }
+
+    if (!review.userId.equals(userId)) {
+        return this.errorRes(res, 400, "You can only edit your own reviews");
+    }
+    if (score < 0 || score > 5) {
+        return this.errorRes(res, 400, "Score must be between 0 and 5");
+    }
+    if (score){
+    review.score = score;
+    }
+    if (content){
+        review.content = content;
+    }
+    await review.save();
+        return this.successRes(res, 200, "Review edited", review);
+} catch (error) {
+    return this.errorRes(res, 500, "Error editing review", error);
+}
+}
+
+//funcion para eliminar Reviews
+deleteReview = async (req: Request, res: Response): Promise<Response> => {
+try {
+    const userId = (req as AuthRequest).user._id
+    const { id } = req.params;
+    const review = await Review.findById(id);
+    if (!review) {
+        return this.errorRes(res, 400, "Review not found");
+    }
+
+    if (!review.userId.equals(userId)) {
+        return this.errorRes(res, 400, "You can only delete your own reviews");
+    }
+    await review.deleteOne();
+    return this.successRes(res, 200, "Review deleted");
+} catch (error) {
+    return this.errorRes(res, 500, "Error deleting review", error);
+}
+}
+
 }
 
 export default new ReviewController();

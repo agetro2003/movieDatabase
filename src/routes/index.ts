@@ -13,6 +13,7 @@ router.use(checkAuth);
 
 router.use('/trending', trendingRouter);    
 router.use('/search', searchRouter);
-router.use('/', mediaRouter);
 router.use('/review', reviewRouter);
+router.use('/media', mediaRouter);
+
 export default router;
