@@ -41,52 +41,49 @@ class SearchController extends BaseController {
     const with_genres = req.query.with_genres || null;
     const sort_by = req.query.sort_by || null;
     const primary_release_year = req.query.primary_release_year || null;
-    const year = req.query.year || null;
-    const without_genres = req.query.without_genres || null;
+    const first_air_date_year = req.query.first_air_date_year || null;
+    const with_original_language = req.query.with_original_language || null;
     const page = req.query.page || null;
-    const with_cast = req.query.with_cast || null;
     let query = "";
     const filters = {
       with_genres,
       sort_by,
       primary_release_year,
-      year,
-      without_genres,
+      first_air_date_year,
+      with_original_language,
       page,
-      with_cast,
     };
     for (const [key, value] of Object.entries(filters)) {
       if (value !== null) {
         query += `&${key}=${value}`;
       }
     }
-      try {
-        const search = await AxiosInstance.get(
-          `discover/${media_type}?${query.slice(1)}`
-        );
+    try {
+      const search = await AxiosInstance.get(
+        `discover/${media_type}?${query.slice(1)}`
+      );
 
-        const results = search.data.results
-        .map((result: any) => ({
-            id: result.id,
-            name: result.title || result.name,
-            poster: result.poster_path
-                ? `https://image.tmdb.org/t/p/w780${result.poster_path}`
-                : "https://firebasestorage.googleapis.com/v0/b/imgstorage-b6657.appspot.com/o/imgNotFound.png?alt=media&token=3eec4488-078e-4130-a238-36936cb38807",
-            media_type: media_type,
-            adult: result.adult,
-            }));
+      const results = search.data.results.map((result: any) => ({
+        id: result.id,
+        name: result.title || result.name,
+        poster: result.poster_path
+          ? `https://image.tmdb.org/t/p/w780${result.poster_path}`
+          : "https://firebasestorage.googleapis.com/v0/b/imgstorage-b6657.appspot.com/o/imgNotFound.png?alt=media&token=3eec4488-078e-4130-a238-36936cb38807",
+        media_type: media_type,
+        adult: result.adult,
+      }));
 
-        const response = {
-            page: search.data.page,
-            total_pages: search.data.total_pages,
-            results,
-            query: query.slice(1),
-            };
+      const response = {
+        page: search.data.page,
+        total_pages: search.data.total_pages,
+        results,
+        query: query.slice(1),
+      };
 
-        return this.successRes(res, 201, "Success getting data", response);
-      } catch (error) {
-        return this.errorRes(res, 500, "Internal server error", error);
-      }
+      return this.successRes(res, 201, "Success getting data", response);
+    } catch (error) {
+      return this.errorRes(res, 500, "Internal server error", error);
+    }
   };
 }
 
