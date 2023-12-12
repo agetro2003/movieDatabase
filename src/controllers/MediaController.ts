@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import BaseController from "./BaseController";
-import { Media } from "../models";
+import { Media, Review } from "../models";
 import AxiosInstance from "../config/axios";
+import { AuthRequest } from "../interfaces";
 
 class MediaController extends BaseController {
   getMedia = async (req: Request, res: Response): Promise<Response> => {
@@ -51,7 +52,11 @@ class MediaController extends BaseController {
         return this.successRes(res, 200, "media found", newmedia);
       }
       console.log("encontrado");
-      return this.successRes(res, 200, "media found", media);
+      const userId = (req as AuthRequest).user._id;
+      const review = await Review.findOne({ userId: userId, MediaID: media._id });
+      const haveReview = (review != null) ? true : false;
+      console.log(review)
+      return this.successRes(res, 200, "media found", {media, haveReview});
     } catch (error) {
       return this.errorRes(res, 500, "Error getting media", error);
     }
