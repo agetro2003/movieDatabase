@@ -16,7 +16,7 @@ class SearchController extends BaseController {
         .filter((result: any) => result.media_type !== "person")
         .map((result: any) => ({
           id: result.id,
-          name: result.title || result.name,
+          title: result.title || result.name,
           poster: `https://image.tmdb.org/t/p/w780${result.poster_path}`,
           media_type: result.media_type,
           adult: result.adult,
@@ -63,7 +63,7 @@ class SearchController extends BaseController {
 
       const results = search.data.results.map((result: any) => ({
         id: result.id,
-        name: result.title || result.name,
+        title: result.title || result.name,
         poster: `https://image.tmdb.org/t/p/w780${result.poster_path}`,
         media_type: media_type,
         adult: result.adult,

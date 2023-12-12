@@ -15,7 +15,7 @@ class TrendingController extends BaseController {
       const results = trendings.data.results.map((trending: any) => {
         return {
           id: trending.id,
-          name: trending.title ? trending.title : trending.name,
+          title: trending.title ? trending.title : trending.name,
           poster: `https://image.tmdb.org/t/p/w780${trending.poster_path}`,
           media_type: trending.media_type,
           adult: trending.adult,
