@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import BaseController from "./BaseController";
-import { ICommentDocument } from "../interfaces";
+import { AuthRequest, ICommentDocument } from "../interfaces";
 import { Comment } from "../models";
 
 class CommentController extends BaseController {
@@ -29,7 +29,50 @@ class CommentController extends BaseController {
     }
 
     //funcion para borrar un comentario
+    deleteComment = async (req: Request, res: Response): Promise<Response> => {
+        const { commentId } = req.params;
+        if (!commentId) {
+            return this.errorRes(res, 400, "Missing fields");
+        }
+        try {
+            const userId = (req as AuthRequest).user._id;
+            const comment = await Comment.findById(commentId);
+            if (!comment) {
+                return this.errorRes(res, 400, "Comment not found");
+            }
+            if (!comment.userId.equals(userId)) {
+                return this.errorRes(res, 401, "You can only delete your own comments");
+            }
+            await comment.deleteOne();
+            return this.successRes(res, 200, "comment deleted", comment);
+        } catch (error) {
+            return this.errorRes(res, 500, "Error deleting comment", error);
+        }
+    }
+
     //funcion para editar un comentario
+    editComment = async (req: Request, res: Response): Promise<Response> => {
+        const { commentId } = req.params;
+        const { content } = req.body;
+        if (!commentId || !content) {
+            return this.errorRes(res, 400, "Missing fields");
+        }
+        try {
+            const userId = (req as AuthRequest).user._id;
+            const comment = await Comment.findById(commentId);
+            if (!comment) {
+                return this.errorRes(res, 400, "Comment not found");
+            }
+            if (!comment.userId.equals(userId)) {
+                return this.errorRes(res, 401, "You can only edit your own comments");
+            }
+            comment.content = content;
+            await comment.save();
+            return this.successRes(res, 200, "comment edited", comment);
+        } catch (error) {
+            return this.errorRes(res, 500, "Error editing comment", error);
+        }
+    }
     //funcion para obtener todos los comentarios de una review o comentario
     getComments = async (req: Request, res: Response): Promise<Response> => {
         const { type, isReplyTo } = req.params;
@@ -49,6 +92,7 @@ class CommentController extends BaseController {
             return this.errorRes(res, 500, "Error getting comments", error);
         }
     }
+
 }
 
 export default new CommentController();
