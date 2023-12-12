@@ -5,6 +5,7 @@ const MediaSchema = new Schema<IMediaDocument>(
   {
     MediaID: { type: Number, required: true },
     title: { type: String, required: true },
+    original_title: { type: String, required: true },
     overview: { type: String, required: true },
     poster: { type: String, required: true },
     backdrop: { type: String, required: true },

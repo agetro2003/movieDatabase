@@ -3,6 +3,7 @@ import { Document } from "mongoose";
 export interface IMedia {
   MediaID: number;
   title: string;
+  original_title: string;
   overview: string;
   poster: string;
   backdrop: string;

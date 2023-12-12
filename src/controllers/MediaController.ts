@@ -31,6 +31,7 @@ class MediaController extends BaseController {
         const newmedia = new Media({
           MediaID: id,
           title: mediaData.title || mediaData.name,
+          original_title: mediaData.original_title || mediaData.original_name,
           overview: mediaData.overview,
           poster: `https://image.tmdb.org/t/p/w780/${mediaData.poster_path}`,
           backdrop: `https://image.tmdb.org/t/p/w780/${mediaData.backdrop_path}`,
