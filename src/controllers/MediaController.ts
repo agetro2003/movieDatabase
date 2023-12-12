@@ -17,10 +17,10 @@ class MediaController extends BaseController {
           (video: any) => video.type === "Trailer"
         );
         const cast = mediaData.credits.cast.map((person: any) => ({
-          id: person.id,
-          name: person.name,
-          character: person.character,
-          profile: `https://image.tmdb.org/t/p/w780${person.profile_path}`,
+          id: person.id || null,
+          name: person.name || null,
+          character: person.character || null,
+          profile: person.profile_path? `https://image.tmdb.org/t/p/w780${person.profile_path}`: null,
         }));
         const similar = mediaData.similar.results.map((media: any) => ({
           id: media.id,

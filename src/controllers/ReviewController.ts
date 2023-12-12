@@ -36,9 +36,24 @@ getReviews = async (req: Request, res: Response): Promise<Response> => {
 try {
     const { id } = req.params;
     console.log(id);
-    const reviews = await Review.find({ MediaID: id });
+    let reviews: any[] = await Review.find({ MediaID: id }).populate("userId");
+    const respone = reviews.map((review) => {
+        return {
+            id: review._id,
+            userId: {
+                id: review.userId._id,
+                username: review.userId.username,
+                avatar: review.userId.avatar,
+                critic: review.userId.critic,
+            },
+            score: review.score,
+            content: review.content,
+        }
+    })
+
+    
     console.log(reviews);
-    return this.successRes(res, 200, "Reviews found", reviews);
+    return this.successRes(res, 200, "Reviews found", respone);
 
 }
 catch (error) {
