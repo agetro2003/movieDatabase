@@ -4,7 +4,7 @@ import SearchController from "./SearchController";
 import TrendingController from "./TrendingController";
 import MediaController from "./MediaController";
 import ReviewController from "./ReviewController";
-
+import CommentController from "./CommentController";
 export {
   AuthController,
   UserController,
@@ -12,4 +12,5 @@ export {
   TrendingController,
   MediaController,
   ReviewController,
+  CommentController,
 };

@@ -3,10 +3,8 @@ import { Document, Types } from 'mongoose';
 
 export interface IComment {
     userId: Types.ObjectId;
-    isReplyTo: {
-        type: string;
-        id: Types.ObjectId | string;
-    }
+    reviewId: Types.ObjectId | null;
+    commentId: Types.ObjectId | null;
     content: string;
     }
 
