@@ -20,21 +20,23 @@ class MediaController extends BaseController {
           id: person.id,
           name: person.name,
           character: person.character,
-          profile: `https://image.tmdb.org/t/p/w780/${person.profile_path}`,
+          profile: `https://image.tmdb.org/t/p/w780${person.profile_path}`,
         }));
         const similar = mediaData.similar.results.map((media: any) => ({
           id: media.id,
           title: media.title || media.name,
-          poster: `https://image.tmdb.org/t/p/w780/${media.poster_path}`,
+          poster: `https://image.tmdb.org/t/p/w780${media.poster_path}`,
+          media_type: mediaType,
           adult: media.adult,
         }));
         const newmedia = new Media({
           MediaID: id,
           title: mediaData.title || mediaData.name,
           original_title: mediaData.original_title || mediaData.original_name,
+          original_language: mediaData.original_language,
           overview: mediaData.overview,
-          poster: `https://image.tmdb.org/t/p/w780/${mediaData.poster_path}`,
-          backdrop: `https://image.tmdb.org/t/p/w780/${mediaData.backdrop_path}`,
+          poster: `https://image.tmdb.org/t/p/w780${mediaData.poster_path}`,
+          backdrop: `https://image.tmdb.org/t/p/w780${mediaData.backdrop_path}`,
           trailer: `https://www.youtube.com/watch?v=${trailer.key}`,
           year: mediaData.release_date
             ? mediaData.release_date.split("-")[0]

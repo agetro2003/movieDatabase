@@ -4,6 +4,7 @@ export interface IMedia {
   MediaID: number;
   title: string;
   original_title: string;
+  original_language: string;
   overview: string;
   poster: string;
   backdrop: string;
