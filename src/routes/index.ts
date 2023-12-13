@@ -6,6 +6,7 @@ import searchRouter from './search';
 import mediaRouter from './media';
 import reviewRouter from './review';
 import commentRouter from './comment';
+import userRouter from './users';
 const router = Router();
 
 router.use('/auth', authRouter);
@@ -17,5 +18,5 @@ router.use('/search', searchRouter);
 router.use('/review', reviewRouter);
 router.use('/media', mediaRouter);
 router.use('/comment', commentRouter);
-
+router.use('/user', userRouter)
 export default router;

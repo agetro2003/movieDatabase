@@ -14,36 +14,49 @@ class MediaController extends BaseController {
           `${mediaType}/${id}?append_to_response=similar%2Cvideos%2Ccredits%2Crelease_dates`
         );
         const mediaData = media2.data;
-        const trailer = mediaData.videos.results.find(
-          (video: any) => video.type === "Trailer"
-        );
-        const cast = mediaData.credits.cast.map((person: any) => ({
+        let videos = mediaData.videos.results
+        if (!videos) {
+          videos = null
+        }
+        let cast = null
+        if (mediaData.credits.cast || mediaData.credits.cast.length > 0) {
+        cast = mediaData.credits.cast.map((person: any) => ({
           id: person.id || null,
           name: person.name || null,
           character: person.character || null,
           profile: person.profile_path? `https://image.tmdb.org/t/p/w780${person.profile_path}`: null,
         }));
-        const similar = mediaData.similar.results.map((media: any) => ({
-          id: media.id,
-          title: media.title || media.name,
-          poster: `https://image.tmdb.org/t/p/w780${media.poster_path}`,
+        }
+        let similar = null
+       
+       if(mediaData.similar.results || mediaData.similar.results.length > 0)
+        { 
+          similar = mediaData.similar.results.map((media: any) => ({
+          id: media.id || null,
+          title: media.title || media.name || null,
+          poster: media.poster_path? `https://image.tmdb.org/t/p/w780${media.poster_path}`: null,
           media_type: mediaType,
-          adult: media.adult,
+          adult: media.adult || null,
         }));
+      }
         const newmedia = new Media({
           MediaID: id,
-          title: mediaData.title || mediaData.name,
-          original_title: mediaData.original_title || mediaData.original_name,
-          original_language: mediaData.original_language,
-          overview: mediaData.overview,
-          poster: `https://image.tmdb.org/t/p/w780${mediaData.poster_path}`,
-          backdrop: `https://image.tmdb.org/t/p/w780${mediaData.backdrop_path}`,
-          trailer: `https://www.youtube.com/watch?v=${trailer.key}`,
+          title: mediaData.title || mediaData.name || null,
+          original_title: mediaData.original_title || mediaData.original_name || null,
+          original_language: mediaData.original_language || null,
+          overview: mediaData.overview || null,
+          poster: mediaData.poster_path!=null?`https://image.tmdb.org/t/p/w780${mediaData.poster_path}`: null,
+          backdrop: mediaData.backdrop_path!=null?`https://image.tmdb.org/t/p/w780${mediaData.backdrop_path}`: null,
+          videos: videos,
           year: mediaData.release_date
             ? mediaData.release_date.split("-")[0]
-            : mediaData.first_air_date.split("-")[0],
-          genres: mediaData.genres,
-          cast: cast.slice(0, 10),
+            : 
+            mediaData.first_air_date
+            ? mediaData.first_air_date.split("-")[0]
+            : 
+            null,
+          genres: mediaData.genres || null,
+          cast: (cast!=null)? cast.slice(0, 10): null,
           similar: similar,
           mediaType: mediaType,
         });
