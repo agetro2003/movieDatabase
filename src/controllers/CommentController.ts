@@ -6,7 +6,8 @@ import { Comment } from "../models";
 class CommentController extends BaseController {
     //funcion para crear un comentario]
         createComment = async (req: Request, res: Response): Promise<Response> => {
-        const { userId, type, isReplyTo, content } = req.body;
+            const userId = (req as AuthRequest).user._id;
+            const { type, isReplyTo, content } = req.body;
         if (!userId || !type || !content || !isReplyTo) {
             return this.errorRes(res, 400, "Missing fields");
         } 

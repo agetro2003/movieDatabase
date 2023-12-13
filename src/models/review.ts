@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { IReviewDocument } from "../interfaces";
+import Comment from "./Comment";
 
 const ReviewSchema = new Schema<IReviewDocument>(
   {
@@ -13,5 +14,13 @@ const ReviewSchema = new Schema<IReviewDocument>(
     versionKey: false,
   }
 );
+
+ReviewSchema.pre<IReviewDocument>('deleteOne', { document: true, query: false }, async function(next) {
+  const commentsToDelete = await Comment.find({ reviewId: this._id });
+
+  for (const comment of commentsToDelete) {
+    await comment.deleteOne();
+  }  next();
+} )
 
 export default model<IReviewDocument>("Review", ReviewSchema);

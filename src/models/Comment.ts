@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { ICommentDocument } from "../interfaces";
+import Comment from "./Comment";
 
 
 const CommentSchema = new Schema<ICommentDocument>(
@@ -14,5 +15,14 @@ const CommentSchema = new Schema<ICommentDocument>(
         versionKey: false,
     }
 );
+
+CommentSchema.pre<ICommentDocument>('deleteOne', { document: true, query: false }, async function(next) {
+    const commentsToDelete = await Comment.find({ commentId: this._id });
+
+    for (const comment of commentsToDelete) {
+      await comment.deleteOne();
+    }
+    next();
+} )
 
 export default model<ICommentDocument>("Comment", CommentSchema);
