@@ -16,6 +16,8 @@ const MediaSchema = new Schema<IMediaDocument>(
     cast: { type: [Object], default: null },
     similar: { type: [Object], default: null },
     mediaType: { type: String, default: null },
+    seasons: { type: [Object], default: null },
+
   },
   {
     timestamps: true,

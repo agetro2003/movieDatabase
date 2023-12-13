@@ -18,6 +18,7 @@ export interface IMedia {
   cast: Object[] | null;
   similar: Object[] | null;
   mediaType: string | null;
+  seasons: Object[] | null;
 }
 
 export interface IMediaDocument extends IMedia, Document {}

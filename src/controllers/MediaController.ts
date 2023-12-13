@@ -88,6 +88,7 @@ class MediaController extends BaseController {
           cast: cast ? cast.slice(0, 10) : null,
           similar: similar,
           mediaType: mediaType,
+          seasons: mediaData.seasons || null,
         });
         await newmedia.save();
         console.log("guardado");
