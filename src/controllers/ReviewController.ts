@@ -23,8 +23,12 @@ class ReviewController extends BaseController {
       } else {
         newReview = new Review({ userId, MediaID, score, content });
       }
+      const response = await newReview.populate(
+        "userId",
+        "-password -createdAt -updatedAt -email"
+      );
       await newReview.save();
-      return this.successRes(res, 200, "Review created", newReview);
+      return this.successRes(res, 200, "Review created", response);
     } catch (error) {
       return this.errorRes(res, 500, "Error creating review", error);
     }
@@ -32,17 +36,22 @@ class ReviewController extends BaseController {
 
   //funcion para obtener Reviews
   getReviews = async (req: Request, res: Response): Promise<Response> => {
+    const userId = (req as AuthRequest).user._id;
     try {
       const { id } = req.params;
-      console.log(id);
       let reviews: any[] = await Review.find({ MediaID: id }).populate(
         "userId"
-      );
-      const respone = reviews.map((review) => {
+      ).sort({ createdAt: -1 });
+
+      const userReview = await Review.findOne({ userId: userId, MediaID: id });
+
+      const userHasReviewed = userReview != null;
+
+      const response = reviews.map((review) => {
         return {
           id: review._id,
-          user: {
-            id: review.userId._id,
+          userId: {
+            _id: review.userId._id,
             username: review.userId.username,
             avatar: review.userId.avatar,
             critic: review.userId.critic,
@@ -54,7 +63,10 @@ class ReviewController extends BaseController {
         };
       });
 
-      return this.successRes(res, 200, "Reviews found", respone);
+      return this.successRes(res, 200, "Reviews found", {
+        reviews: response,
+        userHasReviewed,
+      });
     } catch (error) {
       return this.errorRes(res, 500, "Error getting reviews", error);
     }
