@@ -4,34 +4,53 @@ import { Media, Review } from "../models";
 import AxiosInstance from "../config/axios";
 import { AuthRequest, IReviewDocument } from "../interfaces";
 
-const calculateScore = async (MediaID:string) => {
+const calculateScore = async (MediaID: string) => {
+  const reviews: any[] = await Review.find({ MediaID: MediaID }).populate(
+    "userId"
+  );
+  let criticReviewCount = 0;
+  let userReviewCount = 0;
+  let totalReviewCount = 0;
+  let sumCritic = 0;
+  let sumUser = 0;
+  let sumTotal = 0;
 
-  const reviews: any[] = await Review.find({MediaID: MediaID}).populate("userId")
-  let criticReviewCount = 0
-  let userReviewCount = 0
-  let totalReviewCount = 0
-  let sumCritic = 0
-  let sumUser = 0
-  let sumTotal = 0
-  for (const review of reviews) {
-    if (review.userId.critic == true) {
-      criticReviewCount++
-      sumCritic += review.score
-    } else {
-      userReviewCount++
-      sumUser += review.score
-    }
-    totalReviewCount++
-    sumTotal += review.score
+  if (reviews.length === 0) {
+    return {
+      criticReviewCount,
+      userReviewCount,
+      totalReviewCount,
+      criticScoreAvg: 0,
+      userScoreAvg: 0,
+      totalScoreAvg: 0,
+    };
   }
 
-  const criticScoreAvg = (sumCritic/criticReviewCount).toFixed(1)
-  const userScoreAvg = (sumUser/userReviewCount).toFixed(1)
-  const totalScoreAvg = (sumTotal/totalReviewCount).toFixed(1)
+  for (const review of reviews) {
+    if (review.userId.critic == true) {
+      criticReviewCount++;
+      sumCritic += review.score;
+    } else {
+      userReviewCount++;
+      sumUser += review.score;
+    }
+    totalReviewCount++;
+    sumTotal += review.score;
+  }
 
-  return {criticReviewCount, userReviewCount, totalReviewCount, criticScoreAvg, userScoreAvg, totalScoreAvg}
+  const criticScoreAvg = (sumCritic / criticReviewCount).toFixed(1);
+  const userScoreAvg = (sumUser / userReviewCount).toFixed(1);
+  const totalScoreAvg = (sumTotal / totalReviewCount).toFixed(1);
 
-}
+  return {
+    criticReviewCount,
+    userReviewCount,
+    totalReviewCount,
+    criticScoreAvg,
+    userScoreAvg,
+    totalScoreAvg,
+  };
+};
 
 class MediaController extends BaseController {
   getMedia = async (req: Request, res: Response): Promise<Response> => {
@@ -92,14 +111,20 @@ class MediaController extends BaseController {
         });
         await newmedia.save();
         console.log("guardado");
-        return this.successRes(res, 200, "media found", {newmedia});
+        const response = {
+          ...newmedia.toObject(),
+          ...(await calculateScore(newmedia._id)),
+        };
+
+        return this.successRes(res, 200, "media found", response);
       }
       console.log("encontrado");
-      const userId = (req as AuthRequest).user._id;
-      const review = await Review.findOne({ userId: userId, MediaID: media._id });
-      const haveReview = (review != null) ? true : false;
-      console.log(review)
-      return this.successRes(res, 200, "media found", {media, haveReview, ReviewsData: await calculateScore(media._id)});
+
+      const response = {
+        ...media.toObject(),
+        ...(await calculateScore(media._id)),
+      };
+      return this.successRes(res, 200, "media found", response);
     } catch (error) {
       return this.errorRes(res, 500, "Error getting media", error);
     }
