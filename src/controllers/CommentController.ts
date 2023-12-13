@@ -1,19 +1,34 @@
 import { Request, Response } from "express";
 import BaseController from "./BaseController";
 import { AuthRequest, ICommentDocument } from "../interfaces";
-import { Comment } from "../models";
+import { Comment, Review } from "../models";
 
 class CommentController extends BaseController {
     //funcion para crear un comentario]
         createComment = async (req: Request, res: Response): Promise<Response> => {
             const userId = (req as AuthRequest).user._id;
             const { type, isReplyTo, content } = req.body;
-        if (!userId || !type || !content || !isReplyTo) {
+        if (!type || !content || !isReplyTo) {
             return this.errorRes(res, 400, "Missing fields");
         } 
         if (type !== "comment" && type !== "review") {
             return this.errorRes(res, 400, "Invalid type");
         }
+
+        //check if the review or comment exists
+        if (type === "review") {
+            const review = await Review.findById(isReplyTo);
+            if (!review) {
+                return this.errorRes(res, 400, "Review not found");
+            }
+        }else if (type === "comment") {
+        const comment = await Comment.findById(isReplyTo);
+        if (!comment) {
+            return this.errorRes(res, 400, "Comment not found");
+        }
+    }
+
+
         try {
             const newComment: ICommentDocument = new Comment({
                 commentId: type === "comment"? isReplyTo : null,
