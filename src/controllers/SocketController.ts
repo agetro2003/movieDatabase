@@ -8,23 +8,25 @@ class SocketController {
             socket.join(chatId)
             console.log('user connected', userId)
             socket.broadcast.to(chatId).emit('user-connected', userId)
-
-            socket.on('send-message', async (content)=>{
+       
+        })
+        socket.on('send-message', async (data)=>{
+            const {content, userId, chatId} = data
+                console.log(content)
             const message = new Message({
-                content,
-                userId,
-                chatId
+                content: content,
+                userId: userId,
+                chatId: chatId
             })
             await message.save()
+            console.log(message)
             socket.broadcast.to(chatId).emit('receive-message', {content, userId})
             })
 
-            socket.on('disconnect', ()=>{ 
-                console.log('user disconnected', userId)
-                socket.broadcast.to(chatId).emit('user-disconnected', userId)
-            })
-       
-        })
+            
+            socket.on('disconnect', ()=>{
+                console.log('user disconnected')
+7            })
     }
 
 
