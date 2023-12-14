@@ -1,8 +1,19 @@
 import 'dotenv/config';
 import app from './app';
 import mongoose from 'mongoose';
-
+import { createServer } from 'http'
+import { Server } from 'socket.io';
+import { SocketController } from './controllers';
 const PORT = process.env.PORT ?? 3000;
+
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: '*',
+  }
+});
+
+io.on('connection', SocketController.connection)
 
 const connection = async (): Promise<void> => {
   try {
@@ -17,7 +28,7 @@ const connection = async (): Promise<void> => {
 
 // Connect to the database before listening
 connection().then(() => {
-  app.listen(PORT, () => {
+  httpServer.listen(PORT, () => {
     console.log('listening for requests');
   });
 });

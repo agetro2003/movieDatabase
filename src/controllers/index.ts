@@ -5,6 +5,8 @@ import TrendingController from "./TrendingController";
 import MediaController from "./MediaController";
 import ReviewController from "./ReviewController";
 import CommentController from "./CommentController";
+import SocketController from "./SocketController";
+import ChatController from "./ChatController";
 export {
   AuthController,
   UserController,
@@ -13,4 +15,6 @@ export {
   MediaController,
   ReviewController,
   CommentController,
+  SocketController,
+  ChatController,
 };
