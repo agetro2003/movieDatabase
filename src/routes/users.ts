@@ -1,8 +1,21 @@
 import { Router } from "express";
 import { UserController } from "../controllers";
+import { validate } from "../middlewares";
+import { updatePasswordSchema, updateUserSchema } from "../zod/user";
 
-const router = Router()
+const router = Router();
 
-router.put('/changePassword', UserController.updatePassword)
+router
+  .route("/me")
+  .get(UserController.getAuthUser)
+  .delete(UserController.deleteUser);
 
-export default router
+router.put("/me", validate(updateUserSchema), UserController.updateUser);
+
+router.put(
+  "/changePassword",
+  validate(updatePasswordSchema),
+  UserController.updatePassword
+);
+
+export default router;
