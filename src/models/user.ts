@@ -2,6 +2,8 @@ import { Schema, model } from "mongoose";
 import { type IUserDocument } from "../interfaces";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import Review from "./Review";
+import Comment from "./Comment";
 
 const UserSchema = new Schema<IUserDocument>(
   {
@@ -17,6 +19,8 @@ const UserSchema = new Schema<IUserDocument>(
   }
 );
 
+
+
 UserSchema.pre<IUserDocument>("save", async function (next) {
   if (!this.isModified('password')) next();
 
@@ -26,6 +30,17 @@ UserSchema.pre<IUserDocument>("save", async function (next) {
   this.password = hashedPassword;
   next();
 }) 
+
+UserSchema.pre('deleteOne', { document: true }, async function (next) {
+  const userId = this._id;
+
+  await Promise.all([
+    Review.deleteMany({ userId }),
+    Comment.deleteMany({ userId }),
+  ]);
+
+  next();
+});
 
 UserSchema.methods.comparePassword = async function (
   password: string,
