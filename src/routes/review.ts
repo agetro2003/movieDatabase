@@ -5,6 +5,8 @@ const router =  Router();
 
 router.post("/create", ReviewController.createReview);
 
+router.get("/detail/:id", ReviewController.getReview);
+
 router.get("/:id", ReviewController.getReviews);
 
 router.put("/edit/:id", ReviewController.editReview);

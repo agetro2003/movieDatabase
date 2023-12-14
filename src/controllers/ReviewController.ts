@@ -34,6 +34,22 @@ class ReviewController extends BaseController {
     }
   };
 
+  // funcion para obtener una review por id
+  getReview = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const { id } = req.params;
+      const review: IReviewDocument | null = await Review.findById(id).populate(
+        "userId", "-password -createdAt -updatedAt -email"
+      );
+      if (!review) {
+        return this.errorRes(res, 400, "Review not found");
+      }
+      return this.successRes(res, 200, "Review found", review);
+    } catch (error) {
+      return this.errorRes(res, 500, "Error getting review", error);
+    }
+  };
+
   //funcion para obtener Reviews
   getReviews = async (req: Request, res: Response): Promise<Response> => {
     const userId = (req as AuthRequest).user._id;
