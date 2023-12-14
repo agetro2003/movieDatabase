@@ -46,9 +46,9 @@ const calculateScore = async (MediaID: string) => {
     criticReviewCount,
     userReviewCount,
     totalReviewCount,
-    criticScoreAvg,
-    userScoreAvg,
-    totalScoreAvg,
+    criticScoreAvg: criticScoreAvg === "NaN" ? 0 : criticScoreAvg,
+    userScoreAvg: userScoreAvg === "NaN" ? 0 : userScoreAvg,
+    totalScoreAvg: totalScoreAvg === "NaN" ? 0 : totalScoreAvg,
   };
 };
 
