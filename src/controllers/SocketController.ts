@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import { Message } from "../models";
+import { Message, User } from "../models";
 
 class SocketController {
     connection = (socket: Socket)=> {
@@ -19,8 +19,9 @@ class SocketController {
                 chatId: chatId
             })
             await message.save()
+            const user = await User.findById(userId)
             console.log(message)
-            socket.broadcast.to(chatId).emit('receive-message', {content, userId})
+            socket.broadcast.to(chatId).emit('receive-message', {content, user})
             })
 
             

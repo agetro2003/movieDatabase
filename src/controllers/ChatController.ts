@@ -84,11 +84,11 @@ class ChatController extends BaseController {
   getDetailChat = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { id } = req.params;
-      const chat = await Chat.findById(id);
-      const messages = await Message.find({ chatId: id }).populate({
-        path: "userId",
+      const chat = await Chat.findById(id).populate({
+        path: "usersId",
         select: "-password -email -createdAt -updatedAt",
-      }).sort({createdAt: -1});
+      });
+      const messages = await Message.find({ chatId: id });
       return this.successRes(res, 200, "Chat found", {chat, messages});
     } catch (error) {
       return this.errorRes(res, 500, "Error getting chat", error);
