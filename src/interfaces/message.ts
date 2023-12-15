@@ -1,8 +1,8 @@
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
 
 export interface IMessage {
-userId: string;
-chatId: string;
+userId: Types.ObjectId;
+chatId: Types.ObjectId;
 content: string;
 }
 
