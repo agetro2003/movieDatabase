@@ -45,22 +45,6 @@ class ChatController extends BaseController {
     }
   };
 
-  addUserToChats = async (req: Request, res: Response): Promise<Response> => {
-    const { userId } = req.body;
-    try {
-      if (!userId) {
-        return this.errorRes(res, 400, "User Id is required");
-      }
-      const user = User.findById(userId);
-      if (!user) {
-        return this.errorRes(res, 400, "User not found");
-      }
-      await Chat.updateMany({isPrivate: false}, {$push: {usersId: userId}});
-        return this.successRes(res, 200, "User added to chats");
-    } catch (error) {
-      return this.errorRes(res, 500, "Error adding user to chat", error);
-    }
-  };
 
   getUserChats = async (req: Request, res: Response): Promise<Response> => {
     try {
