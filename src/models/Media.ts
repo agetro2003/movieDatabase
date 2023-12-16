@@ -3,7 +3,7 @@ import { IMediaDocument } from "../interfaces";
 
 const MediaSchema = new Schema<IMediaDocument>(
   {
-    MediaID: { type: Number, default: null},
+    MediaID: { type: Number, default: null },
     title: { type: String, default: null },
     original_title: { type: String, default: null },
     original_language: { type: String, default: null },
@@ -17,7 +17,6 @@ const MediaSchema = new Schema<IMediaDocument>(
     similar: { type: [Object], default: null },
     mediaType: { type: String, default: null },
     seasons: { type: [Object], default: null },
-
   },
   {
     timestamps: true,

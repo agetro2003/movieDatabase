@@ -3,7 +3,7 @@ import { type IUserDocument } from "../interfaces";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Review, Comment, Message } from "./index";
-import chat from "./Chat";
+import Chat from "./Chat";
 
 const UserSchema = new Schema<IUserDocument>(
   {
@@ -40,7 +40,7 @@ UserSchema.pre("deleteOne", { document: true }, async function (next) {
     Review.deleteMany({ userId }),
     Comment.deleteMany({ userId }),
     Message.deleteMany({ userId }),
-    chat.deleteMany({
+    Chat.deleteMany({
       usersId: { $in: [userId] },
     }),
   ]);

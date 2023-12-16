@@ -15,12 +15,17 @@ const ReviewSchema = new Schema<IReviewDocument>(
   }
 );
 
-ReviewSchema.pre<IReviewDocument>('deleteOne', { document: true, query: false }, async function(next) {
-  const commentsToDelete = await Comment.find({ reviewId: this._id });
+ReviewSchema.pre<IReviewDocument>(
+  "deleteOne",
+  { document: true, query: false },
+  async function (next) {
+    const commentsToDelete = await Comment.find({ reviewId: this._id });
 
-  for (const comment of commentsToDelete) {
-    await comment.deleteOne();
-  }  next();
-} )
+    for (const comment of commentsToDelete) {
+      await comment.deleteOne();
+    }
+    next();
+  }
+);
 
 export default model<IReviewDocument>("Review", ReviewSchema);
