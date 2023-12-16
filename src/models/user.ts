@@ -2,8 +2,8 @@ import { Schema, model } from "mongoose";
 import { type IUserDocument } from "../interfaces";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import Review from "./Review";
-import Comment from "./Comment";
+import {Review, Comment} from "./index";
+
 
 const UserSchema = new Schema<IUserDocument>(
   {
