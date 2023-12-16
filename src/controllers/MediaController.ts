@@ -110,7 +110,6 @@ class MediaController extends BaseController {
           seasons: mediaData.seasons || null,
         });
         await newmedia.save();
-        console.log("guardado");
         const response = {
           ...newmedia.toObject(),
           ...(await calculateScore(newmedia._id)),
@@ -118,7 +117,6 @@ class MediaController extends BaseController {
 
         return this.successRes(res, 200, "media found", response);
       }
-      console.log("encontrado");
 
       const response = {
         ...media.toObject(),

@@ -11,7 +11,6 @@ export function checkAuth(
         { session: false },
         (err: Error, user: Express.User) => {
             if (err) {
-                console.log(err);
                 return res
                 .status(500)
                 .json({ status: 'error', message: 'Internal Server Error' });

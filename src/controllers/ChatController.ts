@@ -40,11 +40,9 @@ class ChatController extends BaseController {
       await chat.save();
       return this.successRes(res, 200, "Chat created", chat);
     } catch (error) {
-        console.log(error)
       return this.errorRes(res, 500, "Error creating chat", error);
     }
   };
-
 
   getUserChats = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -63,17 +61,21 @@ class ChatController extends BaseController {
     } catch (error) {
       return this.errorRes(res, 500, "Error getting chats", error);
     }
-  }  
+  };
 
   getDetailChat = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { id } = req.params;
-      const chat = await Chat.findById(id).populate({
-        path: "usersId",
-        select: "-password -email -createdAt -updatedAt",
+      const chat = await Chat.findById(id);
+      const messages = await Message.find({ chatId: id })
+        .populate("userId", "-password -email -createdAt -updatedAt")
+        .sort({ createdAt: -1 })
+        .limit(10);
+
+      return this.successRes(res, 200, "Chat found", {
+        chat,
+        messages: messages.reverse(),
       });
-      const messages = await Message.find({ chatId: id });
-      return this.successRes(res, 200, "Chat found", {chat, messages});
     } catch (error) {
       return this.errorRes(res, 500, "Error getting chat", error);
     }
@@ -87,7 +89,6 @@ class ChatController extends BaseController {
       return this.errorRes(res, 500, "Error getting chats", error);
     }
   };
-
 }
 
 export default new ChatController();

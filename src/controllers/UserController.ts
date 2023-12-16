@@ -45,7 +45,6 @@ class UserController extends BaseController {
 
       return this.successRes(res, 200, "User retrieved", user);
     } catch (error) {
-      console.log(error);
       return this.errorRes(res, 500, "Error getting user", error);
     }
   };
