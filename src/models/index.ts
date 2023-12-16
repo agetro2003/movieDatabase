@@ -1,8 +1,8 @@
 import Chat from "./Chat";
-import Comment from "./Comment";
 import Media from "./Media";
-import Message from "./Message";
 import Review from "./Review";
+import Message from "./Message";
+import Comment from "./Comment";
 import User from "./User";
 
-export { User, Review, Comment, Chat, Message, Media };
+export { Chat, Media, Review, Message, Comment, User };
