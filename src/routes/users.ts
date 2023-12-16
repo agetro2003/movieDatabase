@@ -18,4 +18,6 @@ router.put(
   UserController.updatePassword
 );
 
+router.get("/:userId", UserController.getUser);
+
 export default router;

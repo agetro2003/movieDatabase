@@ -19,7 +19,9 @@ class ChatController extends BaseController {
           );
         }
 
-        const check = await Chat.findOne({ usersId: [mainUserId, userId] });
+        const check = await Chat.findOne({
+          usersId: { $all: [mainUserId, userId] },
+        });
         if (check) {
           return this.errorRes(res, 400, "Chat already exists", check);
         }
@@ -44,10 +46,33 @@ class ChatController extends BaseController {
     }
   };
 
+  checkChatExists = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const { userId } = req.params;
+      const mainUserId = (req as AuthRequest).user._id;
+
+      const check = await Chat.findOne({
+        usersId: { $all: [mainUserId, userId] },
+      });
+
+      return this.successRes(
+        res,
+        200,
+        check ? "Chat exists" : "Chat not found",
+        check ? "true" : "false"
+      );
+    } catch (error) {
+      return this.errorRes(res, 500, "Error creating chat", error);
+    }
+  };
+
   getUserChats = async (req: Request, res: Response): Promise<Response> => {
     try {
       const userId = (req as AuthRequest).user._id;
-      const chats = await Chat.find({ usersId: userId, isPrivate: true });
+      const chats = await Chat.find({
+        usersId: { $in: [userId] },
+        isPrivate: true,
+      }).populate("usersId", "-password -email -createdAt -updatedAt");
       return this.successRes(res, 200, "Chats found", chats);
     } catch (error) {
       return this.errorRes(res, 500, "Error getting chats", error);

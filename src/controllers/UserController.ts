@@ -49,6 +49,25 @@ class UserController extends BaseController {
     }
   };
 
+  getUser = async (req: Request, res: Response): Promise<Response> => {
+    const { userId } = req.params;
+
+    try {
+      const user = await User.findById(
+        userId,
+        "-password -createdAt -updatedAt -email"
+      );
+
+      if (!user) {
+        return this.errorRes(res, 404, "User not found");
+      }
+
+      return this.successRes(res, 200, "User retrieved", user);
+    } catch (error) {
+      return this.errorRes(res, 500, "Error getting user", error);
+    }
+  };
+
   updateUser = async (req: Request, res: Response): Promise<Response> => {
     const { username, avatar } = req.body;
     const userId = (req as AuthRequest).user._id;
