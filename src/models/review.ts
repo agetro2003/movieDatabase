@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 import { IReviewDocument } from "../interfaces";
-import Comment from "./Comment";
+import { Comment } from "./index";
 
 const ReviewSchema = new Schema<IReviewDocument>(
   {

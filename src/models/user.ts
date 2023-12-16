@@ -2,8 +2,7 @@ import { Schema, model } from "mongoose";
 import { type IUserDocument } from "../interfaces";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { Review, Comment, Message } from "./index";
-import Chat from "./Chat";
+import { Review, Comment, Message, Chat } from "./index";
 
 const UserSchema = new Schema<IUserDocument>(
   {
