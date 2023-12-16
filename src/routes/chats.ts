@@ -13,4 +13,6 @@ router.get("/:id", ChatController.getDetailChat);
 
 router.post("/create", ChatController.createChat);
 
+router.get("/check/:userId", ChatController.checkChatExists);
+
 export default router;
