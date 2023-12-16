@@ -1,8 +1,8 @@
-import User from "./user"
-import Review from "./review"
+import User from "./User"
+import Review from "./Review"
 import Comment from "./Comment"
-import Chat from "./chat"
-import Message from "./message"
+import Chat from "./Chat"
+import Message from "./Message"
 import Media from "./Media"
 export {
     User, 
